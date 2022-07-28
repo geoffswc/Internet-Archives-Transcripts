@@ -2,8 +2,8 @@ library(dplyr)
 library(magrittr)
 library(ggplot2)
 library(Hmisc)
-library(gt)
 library(corrplot)
+library(tidyr)
 
 data <- read.csv('final_dataset.csv')
 
@@ -15,7 +15,7 @@ data %<>%
                                             fellow_accuracy_rating == 'Excellent' ~ 3))
 
 # compute & visualize correlations and significance
-correlations <- rcorr(as.matrix(select(data, runtime, year, fellow_accuracy_rating, automl_confidence_avg, computer_sentiment, human_sentiment, wer, bleu_score)))
+correlations <- rcorr(as.matrix(select(data, runtime, year, fellow_accuracy_rating, automl_confidence_avg, computer_sentiment, human_sentiment, war, bleu_score)))
 
 # all correlations
 jpeg("viz/correlations.jpg", width = 600, height = 600)
@@ -35,37 +35,23 @@ corrplot(correlations$r,
          tl.srt = 45,
          p.mat = correlations$P,
          insig = 'blank')
-dev.off()
+dev.off
 
-# average WER by category
+# different types of accuracy by video category
 data %>%
-  group_by(category) %>%
-  summarise(avg_wer = mean(wer)) %>%
+  select(category, fellow_accuracy_rating, automl_confidence_avg, war, bleu_score) %>%
+  pivot_longer(cols = c("fellow_accuracy_rating", "automl_confidence_avg", "war", "bleu_score"), 
+               names_to = "accuracy_type",
+               values_to = "accuracy_score") %>%
+  group_by(category, accuracy_type) %>%
+  summarise(avg_accuracy = mean(accuracy_score, na.rm = TRUE)) %>%
   ggplot() +
-  geom_col(aes(x = category, y = avg_wer, fill = category)) +
+  geom_col(aes(category, avg_accuracy, fill = category)) +
+  scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
+  facet_wrap(~accuracy_type, scales = "free") +
   theme_minimal()
 
-ggsave(filename = "viz/wer_by_category.jpg")
-
-# average fellow score by category
-data %>%
-  group_by(category) %>%
-  summarise(avg_fellow_accuracy = mean(fellow_accuracy_rating, na.rm = TRUE)) %>%
-  ggplot() +
-  geom_col(aes(x = category, y = avg_fellow_accuracy, fill = category)) +
-  theme_minimal()
-
-ggsave(filename = "viz/fellowscore_by_category.jpg")
-
-# average BLEU by category
-data %>%
-  group_by(category) %>%
-  summarise(avg_bleu = mean(bleu_score, na.rm = TRUE)) %>%
-  ggplot() +
-  geom_col(aes(x = category, y = avg_bleu, fill = category)) +
-  theme_minimal()
-  
-ggsave(filename = "viz/bleu_by_category.jpg")
+ggsave(filename = "viz/accuracy_by_category.jpg", width = 6, height = 4)
 
 
 
