@@ -53,5 +53,19 @@ data %>%
 
 ggsave(filename = "viz/accuracy_by_category.jpg", width = 6, height = 4)
 
+data %>%
+  select(category, human_sentiment, computer_sentiment) %>%
+  pivot_longer(cols = c("human_sentiment", "computer_sentiment"), 
+               names_to = "transcript_type",
+               values_to = "sentiment_score") %>%
+  group_by(category, transcript_type) %>%
+  summarise(avg_sentiment = mean(sentiment_score, na.rm = TRUE)) %>%
+  ggplot() +
+  geom_bar(aes(category, avg_sentiment, group = transcript_type, fill = transcript_type), position = "dodge", stat = "identity") +
+  geom_text(position = position_dodge(width = 1.5), aes(category, avg_sentiment, fill = transcript_type, label = round(avg_sentiment, 2), )) +
+  scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
+  theme_minimal()
+  
+
 
 
