@@ -19,7 +19,8 @@ https://internetarchive.readthedocs.io/en/stable/internetarchive.html
 
 We retrieved metadata and links for all items in the ‘'UCSF Industry Archives Videos' collection, though we only ended up extracting transcripts for a small subset.
 
-Script: download_from_ia.py
+#### Script
+download_from_ia.py
 
 ### Building a metadata dataframe
 
