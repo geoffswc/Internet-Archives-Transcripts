@@ -67,6 +67,9 @@ extract_transcript_from_mp4_url.ipynb
 
 We create a three dataframe with the transcript text, overall accuracy, min accuracy, max accuracy, and identifier name, which can be used to join with the metadata containing information on collection, title, mediatype, year, description, subject. Note that the AutoML transcription service assigns an accuracy score for each fraction of a transcript in short (often half-sentence) increments, so we calculated the average overall accuracy score for each transcript. As a result, a transcript with a high or low overall transcription accuracy rating based on the AutoML scores could have smaller sections with much lower or higher transcription accuracies. 
 
+#### workbook
+format_json.ipynb
+
 ## Sentiment Scores
 
 Because we are interested in assessing how sentiment scores vary a transcript based on different attributes, we generate a sentiment score. In this case, we used the generally trained sentiment score from Google AutoML. We store the results in a tabular data format containing identifier, sentiment, and magnitude.
