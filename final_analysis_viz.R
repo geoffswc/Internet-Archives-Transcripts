@@ -14,6 +14,10 @@ data %<>%
                                             fellow_accuracy_rating == 'Good' ~ 2, 
                                             fellow_accuracy_rating == 'Excellent' ~ 3))
 
+data %<>%
+  rename('computer_sentiment' = sentiment,
+         'computer_magnitude' = magnitude)
+
 # compute & visualize correlations and significance
 correlations <- rcorr(as.matrix(select(data, runtime, year, fellow_accuracy_rating, automl_confidence_avg, computer_sentiment, human_sentiment, war, bleu_score)))
 
