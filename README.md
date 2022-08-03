@@ -92,7 +92,7 @@ Topic-Modeling-Kmeans.ipynb
 
 In order to evaluate transcript accuracy between different factors, we created a dataset containing all variables of interest generated above. One observation (or row) of the dataset = one video in the collection. The dataset contains the variables described below.
 
-## Final Dataset Dictionary
+### Final Dataset Dictionary
 
 | Variable      | Description      | Source/Calculation            |
 | ------------- | ---------------- | ----------------------------- |
@@ -114,9 +114,15 @@ In order to evaluate transcript accuracy between different factors, we created a
 | war | [Word Accuracy Rate](https://en.wikipedia.org/wiki/Word_error_rate) | Calculated with python jiwer package |
 | bleu_score | [BLEU Score](https://en.wikipedia.org/wiki/BLEU) | Calculated with python nltk package |
 
+#### workbook
+transcript_accuracy_assessment.ipynb
+
 ## Analysis
 
 Lubov write
+
+#### script
+final_analysis_viz.R
 
 ### Conculsions
 
