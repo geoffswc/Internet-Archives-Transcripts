@@ -90,11 +90,14 @@ Topic-Modeling-Kmeans.ipynb
 
 ## Data Curation
 
-Lubov write
+In order to evaluate transcript accuracy between different factors, we created a dataset containing all variables of interest generated above. One observation (or row) of the dataset = one video in the collection. The dataset contains the variables described below.
 
 ## Final Dataset Dictionary
 
-Lubov write
+| Variable      | Description | Calculation   |
+| ------------- | ----------- | ------------- |
+| Header        | Title       |
+| Paragraph     | Text        |
 
 ## Analysis
 
