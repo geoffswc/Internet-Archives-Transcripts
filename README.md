@@ -96,9 +96,23 @@ In order to evaluate transcript accuracy between different factors, we created a
 
 | Variable      | Description      | Source/Calculation            |
 | ------------- | ---------------- | ----------------------------- |
-| id            | Video identifier | unique id from internetarchive|
-| runtime| Video identifier | unique id from internetarchive|
-| category | Video identifier | unique id from internetarchive|
+| id            | Video identifier | Unique id from internetarchive|
+| runtime| Length of the video (in seconds) | Metadata from internetarchive converted to seconds|
+| category | Video type | Determined by us to be either "Advertising" or "Legal/Court" based on video content|
+| url | Video URL | Metadata from internetarchive|
+| year | Year of video | Metadata from internetarchive|
+| fellow_accuracy_rating | One of "Poor," "Fair," "Good," or "Excellent" | Determined by junior data science fellows based on experience editing the computer transcript|
+| automl_confidence_avg | Average Google AutoML confidence score for the transcript | Metadata from AutoML |
+| automl_confidence_min | Minimum Google AutoML confidence score for the transcript | Metadata from AutoML |
+| automl_confidence_max | Maximum Google AutoML confidence score for the transcript | Metadata from AutoML |
+| computer_transcript | Computer-generated transcript | Generated from AutoML |
+| human_transcript | Human-edited transcript | Transcript after editing by junior data science fellows |
+| sentiment | Sentiment score of the computer-generated transcript | Generated from AutoML |
+| magnitude | Sentiment magnitude of the computer-generated transcript | Generated from AutoML |
+| human_sentiment | Sentiment of the human-edited transcript | Generated from AutoML |
+| human_magnitude | Sentiment magnitude of the human-edited transcript | Generated from AutoML |
+| war | [Word Accuracy Rate](https://en.wikipedia.org/wiki/Word_error_rate) | Calculated with python jiwer package |
+| bleu_score | [BLEU Score](https://en.wikipedia.org/wiki/BLEU) | Calculated with python nltk package |
 
 ## Analysis
 
