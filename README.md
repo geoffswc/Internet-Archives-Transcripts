@@ -97,12 +97,14 @@ In order to evaluate transcript accuracy between different factors, we created a
 | Variable      | Description      | Source/Calculation            |
 | ------------- | ---------------- | ----------------------------- |
 | id            | Video identifier | unique id from internetarchive|
+| runtime| Video identifier | unique id from internetarchive|
+| category | Video identifier | unique id from internetarchive|
 
 ## Analysis
 
 Lubov write
 
-### Conlcusions
+### Conculsions
 
 Lubov write
 
