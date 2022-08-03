@@ -94,10 +94,9 @@ In order to evaluate transcript accuracy between different factors, we created a
 
 ## Final Dataset Dictionary
 
-| Variable      | Description | Calculation   |
-| ------------- | ----------- | ------------- |
-| Header        | Title       |
-| Paragraph     | Text        |
+| Variable      | Description      | Source/Calculation            |
+| ------------- | ---------------- | ----------------------------- |
+| id            | Video identifier | unique id from internetarchive|
 
 ## Analysis
 
