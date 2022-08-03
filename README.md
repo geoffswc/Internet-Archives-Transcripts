@@ -7,7 +7,7 @@ Code and docs for Internet Archives Transcript Project
 Lubov draft & Geoff edit
 
 #### Proposal:
-The original IDL-DSI proposal for this project: Proposal.MD
+Initial IDL-DSI project proposal: Proposal.MD
 
 ## Extracting Videos and Metadata
 
