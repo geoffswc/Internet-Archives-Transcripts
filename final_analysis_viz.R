@@ -5,7 +5,7 @@ library(Hmisc)
 library(corrplot)
 library(tidyr)
 
-data <- read.csv('final_dataset.csv')
+data <- read.csv('data/final_dataset.csv')
 
 # clean data
 data %<>%
@@ -69,6 +69,9 @@ data %>%
   geom_text(position = position_dodge(width = 1.5), aes(category, avg_sentiment, fill = transcript_type, label = round(avg_sentiment, 2), )) +
   scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
   theme_minimal()
+
+ggsave(filename = "viz/sentiment_by_category.jpg", width = 6, height = 4)
+
   
 
 
