@@ -119,17 +119,7 @@ transcript_accuracy_assessment.ipynb
 
 ## Analysis
 
-Lubov write
+Finally, using the research dataset we created, we performed an analysis to investigate our research questions. Using R, we generated summary statistics, visualizations, and statistical tests. The findings from this analysis can be found in this BLOG POST (LINK BLOG POST) summarizing the project. 
 
 #### script
 final_analysis_viz.R
-
-### Conculsions
-
-Lubov write
-
-## Uses
-
-### Instructional Material
-
-### Case Study
