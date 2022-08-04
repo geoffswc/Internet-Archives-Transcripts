@@ -39,7 +39,7 @@ corrplot(correlations$r,
          tl.srt = 45,
          p.mat = correlations$P,
          insig = 'blank')
-dev.off
+dev.off()
 
 # different types of accuracy by video category
 data %>%
@@ -66,7 +66,7 @@ data %>%
   summarise(avg_sentiment = mean(sentiment_score, na.rm = TRUE)) %>%
   ggplot() +
   geom_bar(aes(category, avg_sentiment, group = transcript_type, fill = transcript_type), position = "dodge", stat = "identity") +
-  geom_text(position = position_dodge(width = 1.5), aes(category, avg_sentiment, fill = transcript_type, label = round(avg_sentiment, 2), )) +
+  geom_text(position = position_dodge(width = 1.5), aes(category, avg_sentiment, fill = transcript_type, label = round(avg_sentiment, 2))) +
   scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
   theme_minimal()
 
