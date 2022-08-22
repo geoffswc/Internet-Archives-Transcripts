@@ -18,6 +18,10 @@ data %<>%
   rename('computer_sentiment' = sentiment,
          'computer_magnitude' = magnitude)
 
+data %<>%
+  mutate(category = case_when(category == 'Advertising' ~ 'Commercials',
+                              category == 'Legal/Court' ~ 'Court Proceedings'))
+
 # compute & visualize correlations and significance
 correlations <- rcorr(as.matrix(select(data, runtime, year, fellow_accuracy_rating, automl_confidence_avg, computer_sentiment, human_sentiment, war, bleu_score)))
 
@@ -51,9 +55,13 @@ data %>%
   summarise(avg_accuracy = mean(accuracy_score, na.rm = TRUE)) %>%
   ggplot() +
   geom_col(aes(category, avg_accuracy, fill = category)) +
-  scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
+  scale_fill_manual(values = c("#109648", "#c1d9cdff")) +
   facet_wrap(~accuracy_type, scales = "free") +
-  theme_minimal()
+  theme_minimal() +
+  labs(y = "Average Accuracy", 
+       x = "Video Type", 
+       fill = "Video Type",
+       title = "Transcript accuracy by video type")
 
 ggsave(filename = "viz/accuracy_by_category.jpg", width = 6, height = 4)
 
@@ -66,11 +74,53 @@ data %>%
   summarise(avg_sentiment = mean(sentiment_score, na.rm = TRUE)) %>%
   ggplot() +
   geom_bar(aes(category, avg_sentiment, group = transcript_type, fill = transcript_type), position = "dodge", stat = "identity") +
-  geom_text(position = position_dodge(width = 1.5), aes(category, avg_sentiment, fill = transcript_type, label = round(avg_sentiment, 2))) +
-  scale_fill_manual(values = c("#182825", "#c1d9cdff")) +
-  theme_minimal()
+  geom_text(position = position_dodge(width = 0.9), aes(category, avg_sentiment+0.01, fill = transcript_type, label = round(avg_sentiment, 2))) +
+  scale_fill_manual(values = c("#109648", "#c1d9cdff")) +
+  theme_minimal() +
+  labs(y = "Average Sentiment",
+       x = "Video Type",
+       fill = "Transcript Type",
+       title = "How does sentiment differ between computer and human transcripts?",
+       subtitle = "By video type")
 
 ggsave(filename = "viz/sentiment_by_category.jpg", width = 6, height = 4)
+
+# does average year differ by category?
+# data %>%
+#   group_by(category) %>%
+#   summarise(avg_year = mean(year, na.rm = TRUE))
+
+
+# is there a year of accuracy improvement? is it different by category?
+data %>%
+  select(category, year, fellow_accuracy_rating, automl_confidence_avg, war, bleu_score) %>%
+  mutate(decade = case_when(year >= 1950 & year < 1960 ~ '1950s',
+                            year >= 1960 & year < 1970 ~ '1960s',
+                                  year >= 1970 & year < 1980 ~ '1970s',
+                                  year >= 1980 & year < 1990 ~ '1980s',
+                                  year >= 1990 & year < 2000 ~ '1990s',
+                                  year >= 2000 & year < 2010 ~ '2000s')) %>%
+  filter(!is.na(decade)) %>%
+  pivot_longer(cols = c("fellow_accuracy_rating", "automl_confidence_avg", "war", "bleu_score"), 
+               names_to = "accuracy_type",
+               values_to = "accuracy_score") %>%
+  group_by(decade, category, accuracy_type) %>%
+  summarise(avg_accuracy = mean(accuracy_score, na.rm = TRUE)) %>%
+  ggplot() +
+  geom_point(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
+  geom_line(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
+  facet_wrap(~category) +
+  theme_minimal() +
+  scale_color_manual(values = c("#182825", "#c1d9cdff", "#109648", "#48BEFF")) +
+  labs(x = "Decade", 
+       y = "Average Accuracy", 
+       color = "Accuracy Type",
+       title = "Transcript accuracy over time", 
+       subtitle = "By score type and video type")
+  
+ggsave(filename = "viz/accuracy_over_time.jpg", width = 6, height = 4)
+
+  
 
   
 
