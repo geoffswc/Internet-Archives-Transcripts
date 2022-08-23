@@ -63,7 +63,7 @@ data %>%
        fill = "Video Type",
        title = "Transcript accuracy by video type")
 
-ggsave(filename = "viz/accuracy_by_category.jpg", width = 6, height = 4)
+ggsave(filename = "viz/accuracy_by_category.jpg", width = 7, height = 4)
 
 data %>%
   select(category, human_sentiment, computer_sentiment) %>%
@@ -83,7 +83,7 @@ data %>%
        title = "How does sentiment differ between computer and human transcripts?",
        subtitle = "By video type")
 
-ggsave(filename = "viz/sentiment_by_category.jpg", width = 6, height = 4)
+ggsave(filename = "viz/sentiment_by_category.jpg", width = 7, height = 4)
 
 # does average year differ by category?
 # data %>%
@@ -110,6 +110,34 @@ data %>%
   geom_point(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
   geom_line(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
   facet_wrap(~category) +
+  theme_minimal() +
+  scale_color_manual(values = c("#182825", "#c1d9cdff", "#109648", "#48BEFF")) +
+  labs(x = "Decade", 
+       y = "Average Accuracy", 
+       color = "Accuracy Type",
+       title = "Transcript accuracy over time", 
+       subtitle = "By score type and video type")
+
+ggsave(filename = "viz/accuracy_over_time_by_category.jpg", width = 6, height = 4)
+
+# is there a year of accuracy improvement? is it different by category?
+data %>%
+  select(year, fellow_accuracy_rating, automl_confidence_avg, war, bleu_score) %>%
+  mutate(decade = case_when(year >= 1950 & year < 1960 ~ '1950s',
+                            year >= 1960 & year < 1970 ~ '1960s',
+                            year >= 1970 & year < 1980 ~ '1970s',
+                            year >= 1980 & year < 1990 ~ '1980s',
+                            year >= 1990 & year < 2000 ~ '1990s',
+                            year >= 2000 & year < 2010 ~ '2000s')) %>%
+  filter(!is.na(decade)) %>%
+  pivot_longer(cols = c("fellow_accuracy_rating", "automl_confidence_avg", "war", "bleu_score"), 
+               names_to = "accuracy_type",
+               values_to = "accuracy_score") %>%
+  group_by(decade, accuracy_type) %>%
+  summarise(avg_accuracy = mean(accuracy_score, na.rm = TRUE)) %>%
+  ggplot() +
+  geom_point(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
+  geom_line(aes(decade, avg_accuracy, color = accuracy_type, group = accuracy_type)) +
   theme_minimal() +
   scale_color_manual(values = c("#182825", "#c1d9cdff", "#109648", "#48BEFF")) +
   labs(x = "Decade", 
