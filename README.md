@@ -119,7 +119,7 @@ transcript_accuracy_assessment.ipynb
 
 ## Analysis
 
-Finally, using the research dataset we created, we performed an analysis to investigate our research questions. Using R, we generated summary statistics, visualizations, and statistical tests. The findings from this analysis can be found in this BLOG POST (LINK BLOG POST) summarizing the project. 
+Finally, using the research dataset we created, we performed an analysis to investigate our research questions. Using R, we generated summary statistics, visualizations, and statistical tests. The findings from this analysis can be found in this [blog post](https://broughttolight.ucsf.edu/2022/08/31/contextualizing-data-for-researchers-a-data-science-fellowship-report/) summarizing the project. 
 
 #### script
 final_analysis_viz.R
