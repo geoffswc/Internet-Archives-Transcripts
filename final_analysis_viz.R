@@ -46,6 +46,19 @@ corrplot(correlations$r,
 dev.off()
 
 # different types of accuracy by video category
+
+# create significance dataframe for facet labeling 
+f_labels_avg_accuracy <- data.frame(accuracy_type = c("fellow_accuracy_rating", "automl_confidence_avg", "war", "bleu_score"), 
+                       label = c(paste("p =", round(t.test(data$fellow_accuracy_rating~data$category)$p.value, 5)),
+                                 paste("p =", round(t.test(data$automl_confidence_avg~data$category)$p.value, 5)),
+                                 paste("p =", round(t.test(data$war~data$category)$p.value, 5)),
+                                 paste("p =", round(t.test(data$bleu_score~data$category)$p.value, 5))),
+                       y = c(max(data$fellow_accuracy_rating, na.rm = TRUE),
+                             max(data$automl_confidence_avg, na.rm = TRUE),
+                             max(data$war, na.rm = TRUE),
+                             max(data$bleu_score, na.rm = TRUE))
+                       )
+
 data %>%
   select(category, fellow_accuracy_rating, automl_confidence_avg, war, bleu_score) %>%
   pivot_longer(cols = c("fellow_accuracy_rating", "automl_confidence_avg", "war", "bleu_score"), 
@@ -57,6 +70,7 @@ data %>%
   geom_col(aes(category, avg_accuracy, fill = category)) +
   scale_fill_manual(values = c("#109648", "#c1d9cdff")) +
   facet_wrap(~accuracy_type, scales = "free") +
+  geom_text(aes(1.5, y, label = label), data = f_labels_avg_accuracy, size = 3, color = "#5A5A5A") +
   theme_minimal() +
   labs(y = "Average Accuracy", 
        x = "Video Type", 
@@ -65,17 +79,37 @@ data %>%
 
 ggsave(filename = "viz/accuracy_by_category.jpg", width = 7, height = 4)
 
+# sentiment by video category
+
+# reshape the dataframe to make sentiment type a variable
+
+data_sentiment <- data %>%
+  select(category, human_sentiment, computer_sentiment) %>%
+  pivot_longer(cols = c("human_sentiment", "computer_sentiment"), 
+               names_to = "transcript_type",
+               values_to = "sentiment_score")
+
+# create significance dataframe for labeling
+
+f_labels_sentiment <- data_sentiment %>% 
+  group_by(category) %>% 
+  summarise(label = paste("p =", t.test(sentiment_score ~ transcript_type)$p.value), 
+            y = max(sentiment_score))
+
 data %>%
   select(category, human_sentiment, computer_sentiment) %>%
   pivot_longer(cols = c("human_sentiment", "computer_sentiment"), 
                names_to = "transcript_type",
                values_to = "sentiment_score") %>%
-  group_by(category, transcript_type) %>%
+  group_by(category) %>%
+  mutate(pval = t.test(sentiment_score ~ transcript_type)$p.value) %>%
+  group_by(category, transcript_type, pval) %>%
   summarise(avg_sentiment = mean(sentiment_score, na.rm = TRUE)) %>%
   ggplot() +
   geom_bar(aes(category, avg_sentiment, group = transcript_type, fill = transcript_type), position = "dodge", stat = "identity") +
   geom_text(position = position_dodge(width = 0.9), aes(category, avg_sentiment+0.01, fill = transcript_type, label = round(avg_sentiment, 2))) +
   scale_fill_manual(values = c("#109648", "#c1d9cdff")) +
+  geom_text(aes(category, max(avg_sentiment), label = paste("p =", round(pval, 3))), size = 3, color = "#5A5A5A") +
   theme_minimal() +
   labs(y = "Average Sentiment",
        x = "Video Type",
@@ -148,6 +182,17 @@ data %>%
   
 ggsave(filename = "viz/accuracy_over_time.jpg", width = 6, height = 4)
 
+# significance of correlations
+
+cor.test(data$year, data$war)
+cor.test(data$year, data$fellow_accuracy_rating)
+cor.test(data$year, data$automl_confidence_avg)
+cor.test(data$bleu_score, data$automl_confidence_avg)
+
+t.test(data$war~data$category)
+t.test(data$fellow_accuracy_rating~data$category)
+t.test(data$war~data$category)
+t.test(data$war~data$category)
   
 
   
