@@ -77,7 +77,7 @@ data %>%
        fill = "Video Type",
        title = "Transcript accuracy by video type")
 
-ggsave(filename = "viz/accuracy_by_category.jpg", width = 7, height = 4)
+ggsave(filename = "viz/accuracy_by_category.jpg", width = 7, height = 5)
 
 # sentiment by video category
 
@@ -111,6 +111,7 @@ data %>%
   scale_fill_manual(values = c("#109648", "#c1d9cdff")) +
   geom_text(aes(category, max(avg_sentiment), label = paste("p =", round(pval, 3))), size = 3, color = "#5A5A5A") +
   theme_minimal() +
+  theme(legend.position = "bottom") +
   labs(y = "Average Sentiment",
        x = "Video Type",
        fill = "Transcript Type",
@@ -193,6 +194,9 @@ t.test(data$war~data$category)
 t.test(data$fellow_accuracy_rating~data$category)
 t.test(data$war~data$category)
 t.test(data$war~data$category)
+
+t.test(data$computer_sentiment ~ data$category)
+t.test(data$human_sentiment ~ data$category)
   
 
   
